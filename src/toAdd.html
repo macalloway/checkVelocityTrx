@@ -1,0 +1,31 @@
+<script>
+  import { onMount } from 'svelte';
+  import { getData } from './utils';
+
+  let transactionsByDay = new Map();
+
+  onMount(async () => {
+    transactionsByDay = await getData('Bcsi3AEUHoM9ji5WsmaSV64CcqDZAsQ5P5uX36eoqYGJ');
+  });
+</script>
+
+<main>
+  <h1>Transactions by Day</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Transaction Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each Array.from(transactionsByDay.entries()) as [date, count]}
+        <tr>
+          <td>{date}</td>
+          <td>{count}</td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</main>
+
