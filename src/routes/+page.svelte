@@ -5,7 +5,7 @@ import moment from 'moment';
 // Set the wallet address to check
 let walletAddressInit = '';
 
-let apiSolana = 'https://api.mainnet-beta.solana.com/'
+let apiSolana = ''
 
 // Set the program ID to filter for
 const programId = new PublicKey('TESTWCwvEv2idx6eZVQrFFdvEJqGHfVA1soApk2NFKQ');
@@ -131,13 +131,19 @@ async function getData() {
 
 </script>
 
-<h1>Still building</h1>
-<p>Visit <a href="https://romeguild.com/">ROME GUILD</a> </p>
-<p>Solana RPC endpoint : <input bind:value={apiSolana} size="50"></p>
-<p>Hey Put you Escape Velocity wallet address here and shout PROCESS button</p>
-<input bind:value={walletAddressInit} size="50">
-<button on:click={getData}> PROCESS </button>
+<h1>Get your Escape Velocity moves transactions per day</h1>
+<p>This project is just for me a way to learn and study how to interact directly with solana blockchain. It also helps me to learn how to build front app with svelte.</p>
+<p>Using Free accounts to interact with solana blockchain (via RPC services) is quite slow and permits only a very limited number of interactions</p>
+<p>That s why this service will ask you to create an account to a RPC provider and fill it here to use this service nothing is store you can check source code here : <a href="https://github.com/macalloway/checkVelocityTrx">Source code</a>. Anyone is welcome to participate</p>
+<p>To use this service correctly you need to create an account to a Solana RPC provider, please vistit this one as i got good results to make this program work : <a href="https://www.quicknode.com/login">quinode RPC provider</a></p>
+<p>Solana RPC endpoint it shouldbe something like : https://small-alien-lambo.solana-mainnet.discover.quiknode.pro/46554654646464564654654 you can find it here : <a href="https://www.quicknode.com/endpoints">https://www.quicknode.com/endpoints</a></p>
+<p>Please fill here your RPC endpoint : <input bind:value={apiSolana} size="50"></p>
+<p>
+  Now you can fill your wallet address her<input bind:value={walletAddressInit} size="50">
+  <button on:click={getData}> PROCESS </button>
+</p>
 <p> 
+  Remember service is quite slow !
 </p>  
 
 {#each [...transactionsByDay] as [key, value]}
