@@ -26,11 +26,18 @@ async function handleClick() {
 }
 
 async function getTransactions(connection, signatures) {
-  const promises = [];
+  /*const promises = [];
   for (const signature of signatures) {
     promises.push(connection.getParsedTransaction(signature,{ maxSupportedTransactionVersion: 0 }));
   }
-  return Promise.all(promises);
+  return Promise.all(promises);*/
+
+  const transactions = await connection.getParsedTransactions(signatures, {
+      maxSupportedTransactionVersion: 0,
+      encoding: 'jsonParsed',
+      commitment: 'confirmed'
+    });
+    return transactions.flatMap(txs => txs);
 }
 
 
@@ -42,7 +49,7 @@ async function getData() {
     let walletStr = walletAddressInit;
     console.log("wa : "+walletStr);
     if(walletStr === ''){
-        transactionsByDay.set('2023-05-01',0);
+        transactionsByDay.set('2023-05-11',0);
         return transactionsByDay;
     }
   // Set the wallet address to check
@@ -51,11 +58,11 @@ async function getData() {
 
   const connection = new Connection(apiSolana);
 
-  let lastDate = '2100-04-14';
+  let lastDate = '2100-05-14';
   let lastSignature = null;
   let lastBlockTime = 0;
 
-  while (lastDate > '2023-04-25' && !isFinished) {
+  while (lastDate >= '2023-05-11' && !isFinished) {
     let signatures = null;
     // Retrieve all transactions for the wallet
     if (lastSignature === null) {
@@ -98,16 +105,14 @@ async function getData() {
           lastSignature = a.transaction.signatures[0];
         }
       })
-
+      lastDate = moment.unix(lastBlockTime).format("YYYY-MM-DD");
+      console.log(lastDate);
       const filteredTransactions = transactions.filter(({ transaction }) => transaction.message.instructions.some(i => i.programId.equals(programId)));
 
       filteredTransactions.forEach((transaction) => {
         const timestamp = transaction.slot * 4000 + 1230768000000; // Convert slot to Unix timestamp in milliseconds
         //const date = new Date(timestamp).toLocaleDateString();
         const date = moment.unix(transaction.blockTime).format("YYYY-MM-DD");
-        if (date < lastDate) {
-          lastDate = date;
-        }
         if (transactionsByDay.has(date)) {
           transactionsByDay.set(date, transactionsByDay.get(date) + 1);
         } else {
