@@ -28,7 +28,7 @@ async function handleClick() {
 async function getTransactions(connection, signatures) {
   const promises = [];
   for (const signature of signatures) {
-    promises.push(connection.getParsedConfirmedTransaction(signature));
+    promises.push(connection.getParsedTransaction(signature,{ maxSupportedTransactionVersion: 0 }));
   }
   return Promise.all(promises);
 }
