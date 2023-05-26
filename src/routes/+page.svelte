@@ -8,20 +8,23 @@
 
 	let apiSolana = '';
 
-	const maxPastDate = '2023-05-11';
+	const maxPastDate = '2023-05-21';
+  let isLoading = false;
 
 	// Set the program ID to filter for
 	const programId = new PublicKey('TESTWCwvEv2idx6eZVQrFFdvEJqGHfVA1soApk2NFKQ');
 	//const programId = new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
 
 	// Set the maximum number of signatures to retrieve in each batch
-	const batchSize = 20;
+	const batchSize = 15;
 
 	let isFinished = false;
 	let transactionsByDay = new Map();
 	let promise = Promise.resolve(new Map());
 	async function handleClick() {
-		await getData();
+    isLoading = true;
+    await getData();
+    isLoading = false;
 	}
 
 	async function getTransactions(connection, signatures) {
@@ -40,6 +43,7 @@
 	}
 
 	async function getData() {
+    transactionsByDay = new Map();
 		let walletStr = walletAddressInit;
 		console.log('wa : ' + walletStr);
 		if (walletStr === '') {
@@ -60,12 +64,12 @@
 			// Retrieve all transactions for the wallet
 			if (lastSignature === null) {
 				signatures = await connection.getConfirmedSignaturesForAddress2(walletAddress, {
-					limit: 100
+					limit: 200
 				});
 			} else {
 				console.log('get signature before ' + lastSignature);
 				signatures = await connection.getConfirmedSignaturesForAddress2(walletAddress, {
-					limit: 100,
+					limit: 200,
 					before: lastSignature
 				});
 			}
@@ -84,7 +88,7 @@
 			}
 			while (startIndex < transactionCount) {
 				console.log('retrieve transaction from %d to %d', startIndex, endIndex);
-				await new Promise((resolve) => setTimeout(resolve, 1000));
+				await new Promise((resolve) => setTimeout(resolve, 1200));
 				const transactions = await getTransactions(
 					connection,
 					str_sign.slice(startIndex, endIndex)
@@ -171,12 +175,15 @@
 <p >Please fill here your RPC endpoint : <input bind:value={apiSolana} size="50" /></p>
 <p>
 	Now you can fill your wallet address here : <input bind:value={walletAddressInit} size="50" />
-	<button on:click={getData}> PROCESS </button>
+	<button on:click={handleClick}> PROCESS </button>
 </p>
 <p>
 	Remember service is quite slow ! It do not display data before Never Alone campaign : {maxPastDate}
 </p>
 
+{#if isLoading}
+  <div class="spinner"></div>
+{/if}
 <ol class="counter">
 {#each [...transactionsByDay] as [key, value]}
 	{#if key >= maxPastDate}
@@ -201,4 +208,19 @@
 
 padding:1em 1em 1em 5em;
 }
+
+.spinner {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 </style>
