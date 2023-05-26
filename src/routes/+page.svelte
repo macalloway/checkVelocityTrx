@@ -155,8 +155,10 @@
 <p>
 	To use this service correctly you need to create an account (Free should be enough) to a Solana
 	RPC provider, please vistit this one as i got good results to make this program work : <a
-		href="https://www.quicknode.com/login">quinode RPC provider</a
-	>
+		href="https://www.quicknode.com/login">quinode RPC provider</a>
+  Page 1 : Here select Endpoint -> create an Endpoint -> Solana -> Mainet Beta.
+  Page 2 : No add on needed
+  Page 3 : Select Discover offer
 </p>
 <p>
 	Solana RPC endpoint it shouldbe something like :
@@ -167,7 +169,7 @@
 </p>
 <p>Please fill here your RPC endpoint : <input bind:value={apiSolana} size="50" /></p>
 <p>
-	Now you can fill your wallet address her<input bind:value={walletAddressInit} size="50" />
+	Now you can fill your wallet address here : <input bind:value={walletAddressInit} size="50" />
 	<button on:click={getData}> PROCESS </button>
 </p>
 <p>
