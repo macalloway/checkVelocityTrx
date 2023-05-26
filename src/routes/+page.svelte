@@ -8,7 +8,7 @@
 
 	let apiSolana = '';
 
-	const maxPastDate = '2023-05-21';
+	const maxPastDate = '2023-05-11';
   let isLoading = false;
 
 	// Set the program ID to filter for
