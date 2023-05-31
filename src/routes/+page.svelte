@@ -104,14 +104,14 @@
 						lastSignature = a.transaction.signatures[0];
 					}
 				});
-				lastDate = moment.unix(lastBlockTime).format('YYYY-MM-DD');
+				lastDate = moment.unix(lastBlockTime).utc().format('YYYY-MM-DD');
 				console.log(lastDate);
 				const filteredTransactions = transactions.filter(({ transaction }) =>
 					transaction.message.instructions.some((i) => i.programId.equals(programId))
 				);
 				filteredTransactions.forEach((transaction) => {
 					const timestamp = transaction.slot * 4000 + 1230768000000; // Convert slot to Unix timestamp in milliseconds
-					const date = moment.unix(transaction.blockTime).format('YYYY-MM-DD');
+					const date = moment.unix(transaction.blockTime).utc().format('YYYY-MM-DD');
 
 					// check if log contains goToWarp call
 					let containsWrap = transaction.meta.logMessages.some((m) => m.includes('GoToWarp'));
